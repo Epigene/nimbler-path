@@ -11,8 +11,8 @@ Gem::Specification.new do |g|
   g.email         = ["augusts.bautra@gmail.com"]
   g.required_ruby_version = ['>= 2.1.0', '< 2.5.0']
 
-  g.summary       = %q|Replace File and Path methods with Nim alternatives for speed|
-  g.description   = %q|Replace File and Path methods with Nim alternatives for speed|
+  g.summary       = %q|Faster Pathname methods in Nim|
+  g.description   = %q|Replaces most-used Pathname methods with Nim alternatives for speed|
   g.homepage      = "https://github.com/Epigene/nimbler-path"
   g.license       = "MIT"
   g.files         = `git ls-files -z`.split("\x0").reject do |f|
