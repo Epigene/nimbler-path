@@ -6,7 +6,7 @@ require "nimbler_path/version"
 Gem::Specification.new do |g|
   g.name          = "nimbler-path"
   g.version       = NimblerPath::VERSION
-  g.date          = Date.today.to_s
+  g.date          = "2017-07-29"
   g.authors       = ["Epigene"]
   g.email         = ["augusts.bautra@gmail.com"]
   g.required_ruby_version = ['>= 2.1.0', '< 2.5.0']
