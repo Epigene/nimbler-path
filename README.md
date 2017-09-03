@@ -8,6 +8,11 @@
 This gem replaces most-used Pathname class ruby methods with much faster counterparts written in Nim.  
 Use for hassle-free, dependency-free speed gains, primarily in Rails projects.  
 
+## Supported Platforms
+As of version 0.9.0 the gem supports 64bit versions of Linux and Mac.  
+Support for Windows is a hassle due to differing path separator, among other things.  
+Open an issue or PR if other OS support is needed.  
+
 ## Dependencies
 
 ```ruby
@@ -17,11 +22,14 @@ ruby ">= 2.1.0" # for required keyword arguments
 ## Installation
 
 ```ruby
-gem 'nimbler_path'
+gem 'nimbler_path', require: false
 ```
 
 ```ruby
 # in an initializer like /config/initializers/nimbler_path.rb
+require 'nimbler_path'
+require 'nimbler_path/monkeypatch'
+
 NimblerPath.apply_monkeypatch!
 ```
 
@@ -59,6 +67,15 @@ Pathname#join @ https://goo.gl/9NzWRt called 4600 times.
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Epigene/nimbler_path. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+1. Clone the project with `git clone --recursive git@github.com:Epigene/nimbler-path.git`
+2. Make sure you are using Ruby v2.4.1
+2. Bundle
+3. Run naive gem-code tests with `ruby test/nimbler_path_test.rb`
+4. Run the tests in included Ruby Spec Suite with `mspec/bin/mspec spec` (Specs affected by this gem are run with `mspec/bin/mspec spec/library/pathname`.
+5. Work on feature, commit and make a pull request :clap:
+
+Please note that this project includes a snapshot of the [Ruby Spec Suite](https://github.com/ruby/spec) project at [SHA dec709b27a1d76bdc27a53a3812f4d3be43f2c2e]()https://github.com/ruby/spec/tree/dec709b27a1d76bdc27a53a3812f4d3be43f2c2e (for Ruby 2.4.1) under spec.  
 
 ## License
 

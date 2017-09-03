@@ -22,8 +22,11 @@ Gem::Specification.new do |g|
   g.executables   = g.files.grep(%r{^exe/}) { |f| File.basename(f) }
   g.require_paths = ["lib"]
 
-  g.add_development_dependency "pry"#, "~> 1.15"
+  g.add_dependency "ffi", "~> 1.9.18"
+  
+  g.add_development_dependency "mspec"#, "~> 5.10.3"
+  g.add_development_dependency "minitest", "~> 5.10.3"
+  g.add_development_dependency "pry", "~> 0.10.4"
   g.add_development_dependency "bundler", "~> 1.15.3"
   g.add_development_dependency "rake", "~> 10.0"
-  g.add_development_dependency "rspec", "~> 3.6.0"
 end

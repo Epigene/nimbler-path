@@ -1,14 +1,30 @@
-require "bundler/setup"
-require "nimbler_path"
+use_realpath = File.respond_to?(:realpath)
+root = File.dirname(__FILE__)
+dir = "fixtures/code"
+CODE_LOADING_DIR = use_realpath ? File.realpath(dir, root) : File.expand_path(dir, root)
 
-RSpec.configure do |config|
-  # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+require "pry"
 
-  # Disable RSpec exposing methods globally on `Module` and `main`
-  config.disable_monkey_patching!
+# injecting NimblerPath
+$LOAD_PATH.unshift(
+  File.expand_path('../../lib', __FILE__)
+)
 
-  config.expect_with :rspec do |c|
-    c.syntax = :expect
+require 'nimbler_path'
+require 'nimbler_path/monkeypatch'
+
+NimblerPath.apply_monkeypatch!
+
+# Running directly with ruby some_spec.rb
+unless ENV['MSPEC_RUNNER']
+  begin
+    require 'mspec'
+    require 'mspec/commands/mspec-run'
+  rescue LoadError
+    puts "Please add -Ipath/to/mspec/lib or install the MSpec gem to run the specs."
+    exit 1
   end
+
+  ARGV.unshift $0
+  MSpecRun.main
 end

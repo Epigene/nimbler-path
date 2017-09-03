@@ -1,0 +1,5 @@
+require File.expand_path('../../../spec_helper', __FILE__)
+
+describe "String#end_with?" do
+  it "needs to be reviewed for spec completeness"
+end
