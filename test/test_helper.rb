@@ -6,3 +6,9 @@ require "pry"
 require 'minitest/autorun'
 
 require 'nimbler_path'
+
+# optional global monkeypatch
+# require 'nimbler_path'
+# require 'nimbler_path/monkeypatch'
+
+# NimblerPath.apply_monkeypatch!

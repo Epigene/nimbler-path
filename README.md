@@ -57,16 +57,22 @@ Ignoring methods already implemented in C leaves us with:
 
 ```rb
 Pathname#chop_basename(path) @ https://goo.gl/9Lk1N9 called 24456 times, 25% of execution time alone
-Pathname#absolute? @ https://goo.gl/5aXYxw called 4840 times.
+
 Pathname#+ @ https://goo.gl/W7biJu called 4606 times.
 Pathname#plus @ https://goo.gl/eRxLYt called 4606 times.
 Pathname#join @ https://goo.gl/9NzWRt called 4600 times.
+Pathname#absolute? @ https://goo.gl/5aXYxw called 4840 times.
+# flipside
+Pathname#relative? @ https://goo.gl/QK4PCs
 ```
 
+This project, at most, aims to provide performant variants for those six methods.
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Epigene/nimbler_path. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+__Development setup__
 
 1. Clone the project with `git clone --recursive git@github.com:Epigene/nimbler-path.git`
 2. Make sure you are using Ruby v2.4.1
@@ -74,6 +80,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Epigen
 3. Run naive gem-code tests with `ruby test/nimbler_path_test.rb`
 4. Run the tests in included Ruby Spec Suite with `mspec/bin/mspec spec` (Specs affected by this gem are run with `mspec/bin/mspec spec/library/pathname`.
 5. Work on feature, commit and make a pull request :clap:
+6. See how benchmarks add up with `ruby test/nimbler_path_benchmarks.rb`
 
 Please note that this project includes a snapshot of the [Ruby Spec Suite](https://github.com/ruby/spec) project at [SHA dec709b27a1d76bdc27a53a3812f4d3be43f2c2e]()https://github.com/ruby/spec/tree/dec709b27a1d76bdc27a53a3812f4d3be43f2c2e (for Ruby 2.4.1) under spec.  
 
