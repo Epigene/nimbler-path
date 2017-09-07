@@ -1,9 +1,9 @@
 require 'pathname'
 
 module NimblerPath
-  def self.apply_monkeypatch!
+  def self.apply_monkeypatch!(verbose: true)
     Monkeypatch._ruby_library_pathname!
-    puts "Replaced some Pathname methods with Nim alternatives!"
+    puts "Replaced some Pathname methods with Nim alternatives!" if verbose
     true
   end
 
@@ -57,8 +57,8 @@ module NimblerPath
         alias_method :old_join, :join
         def join(*args)
           puts ">> In monkeypatched #join"
-          old_join(*args)
-          # NimblerPath.join(@path, *args)
+          # old_join(*args)
+          NimblerPath.join(self, *args)
         end
 
       end

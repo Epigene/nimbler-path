@@ -38,12 +38,14 @@ module NimblerPath
     if base[%r'\A/?\z'o]
       nil
     else
-      return path[0, path.rindex(base)], base
+      return path[0, path.to_s.rindex(base)], base
     end
   end
 
   # Pathname#absolute? @ https://goo.gl/5aXYxw called 4840 times.
   def self.absolute?(path)
+    # Arg must be a String instance
+
     !relative?(path)
     
     # while r = chop_basename(path)
@@ -54,6 +56,8 @@ module NimblerPath
   end
 
   def self.relative?(path)
+    # Arg must be a String instance
+
     # while r = chop_basename(path)
     #   path, = r
     # end
@@ -64,6 +68,7 @@ module NimblerPath
   # Pathname#+ @ https://goo.gl/W7biJu called 4606 times.
   def self.p(path, other)
     # NB, Nim probably will have a problem with method named "+", use :plus_sign instead
+    # :path arg must be a String instance
 
     other = Pathname.new(other) unless Pathname === other
 
@@ -74,7 +79,9 @@ module NimblerPath
 
   # Pathname#plus @ https://goo.gl/eRxLYt called 4606 times.
   def self.plus(path1, path2)
-    # This is the undocumented source, yuck   
+    # This is the undocumented source, yuck  
+    
+    # Both args are definitaly Strings
     
     prefix2 = path2
     index_list2 = []
@@ -150,6 +157,22 @@ module NimblerPath
   def self.join(path, *args)
     # raise("oops")
     # NB, see how Nim can handle splat arguments. Maybe need to pass in an array
+
+    # :path arg must be a Pathname instance
+
+    return path if args.empty?
+
+    result = args.pop
+    result = Pathname.new(result) unless Pathname === result
+
+    return result if result.absolute?
+
+    args.reverse_each {|arg|
+      arg = Pathname.new(arg) unless Pathname === arg
+      result = arg + result
+      return result if result.absolute?
+    }
+    path + result
   end
 
   private

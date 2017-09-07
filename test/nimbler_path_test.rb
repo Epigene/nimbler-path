@@ -28,17 +28,29 @@ class NimblerPathTest < Minitest::Test
   def test_absolute?
     # It returns +true+ if the pathname begins with a slash.
   
-    assert_equal(true, NimblerPath.absolute?('/im/sure'))
+    assert_equal(
+      true,
+      NimblerPath.absolute?('/im/sure')
+    )
   
-    assert_equal(false, NimblerPath.absolute?('not/so/sure'))
+    assert_equal(
+      false,
+      NimblerPath.absolute?('not/so/sure')
+    )
   end
   
   def test_relative?
     # It returns +false+ if the pathname begins with a slash.
   
-    assert_equal(false, NimblerPath.relative?('/im/sure'))
+    assert_equal(
+      false,
+      NimblerPath.relative?('/im/sure')
+    )
     
-    assert_equal(true, NimblerPath.relative?('not/so/sure'))
+    assert_equal(
+      true,
+      NimblerPath.relative?('not/so/sure')
+    )
   end
 
   def test_p
@@ -48,11 +60,20 @@ class NimblerPathTest < Minitest::Test
     #   p2 = p1 + "bin/ruby"           # Pathname:/usr/bin/ruby
     #   p3 = p1 + "/etc/passwd"        # Pathname:/etc/passwd
 
-    assert_equal(Pathname.new("/usr/bin/ruby"), NimblerPath.p('/usr', 'bin/ruby'))
+    assert_equal(
+      Pathname.new("/usr/bin/ruby"),
+      NimblerPath.p('/usr', 'bin/ruby')
+    )
 
-    assert_equal(Pathname.new("/etc/passwd"), NimblerPath.p('/usr', "/etc/passwd"))
+    assert_equal(
+      Pathname.new("/etc/passwd"),
+      NimblerPath.p('/usr', "/etc/passwd")
+    )
   
-    assert_equal(Pathname.new("/etc/passwd"), NimblerPath.p("/usr/", '/etc/passwd'))    
+    assert_equal(
+      Pathname.new("/etc/passwd"),
+      NimblerPath.p("/usr/", '/etc/passwd')
+    )    
   end
 
   def test_plus
@@ -77,6 +98,37 @@ class NimblerPathTest < Minitest::Test
 
     # correctly parses several leading .. in second arg to cut all of first
     assert_equal("..", NimblerPath.plus("usr/file.rb", "../../..")) 
+  end
+
+  def test_join
+    # Joins the given pathnames onto +self+ to create a new Pathname object.
+    #
+    #   path0 = Pathname.new("/usr")                # Pathname:/usr
+    #   path0 = path0.join("bin/ruby")              # Pathname:/usr/bin/ruby
+    #       # is the same as
+    #   path1 = Pathname.new("/usr") + "bin/ruby"   # Pathname:/usr/bin/ruby
+    #   path0 == path1
+    #       #=> true
+
+    # no args
+    assert_equal(
+      Pathname.new("usr"),
+      NimblerPath.join(
+        Pathname.new("usr")
+      )
+    )
+    
+    # non-terminating args
+    assert_equal(
+      Pathname.new("usr/a/b/c"),
+      NimblerPath.join(
+        Pathname.new("usr"),
+        "a", "b", "c"
+      )
+    )
+    
+    # terminating args
+    assert_equal(Pathname.new("/b/c/"), NimblerPath.join(Pathname.new("usrc"), "a/.", "/b/", "c/"))    
   end
 end
 
