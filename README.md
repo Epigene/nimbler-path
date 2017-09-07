@@ -1,7 +1,7 @@
 # NimblerPath
 
 [![Gem Version](https://img.shields.io/github/tag/Epigene/nimbler-path.svg)](https://github.com/Epigene/nimbler-path/tags)
-[![TravisCI Build Status](https://travis-ci.org/Epigene/nimbler-path.svg?branch=master)]()
+[![Build Status](https://travis-ci.org/Epigene/nimbler-path.svg?branch=master)](https://travis-ci.org/Epigene/nimbler-path)
 
 This gem replaces most-used Pathname class ruby methods with much faster counterparts written in Nim.  
 Use for hassle-free, dependency-free speed gains, primarily in Rails projects.  
