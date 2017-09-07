@@ -43,7 +43,7 @@ module NimblerPath
   end
 
   # Pathname#absolute? @ https://goo.gl/5aXYxw called 4840 times.
-  def self.absolute?(path)
+  def self.absolute(path)
     # Arg must be a String instance
 
     !relative?(path)
@@ -55,7 +55,7 @@ module NimblerPath
     # path == ''
   end
 
-  def self.relative?(path)
+  def self.relative(path)
     # Arg must be a String instance
 
     # while r = chop_basename(path)
@@ -70,11 +70,7 @@ module NimblerPath
     # NB, Nim probably will have a problem with method named "+", use :plus_sign instead
     # :path arg must be a String instance
 
-    other = Pathname.new(other) unless Pathname === other
-
-    combo = plus(path, other.to_s)
-
-    Pathname.new(combo)
+    Pathname.new(plus(path, other.to_s))
   end
 
   # Pathname#plus @ https://goo.gl/eRxLYt called 4606 times.
@@ -154,7 +150,7 @@ module NimblerPath
   end
 
   # Pathname#join @ https://goo.gl/9NzWRt called 4600 times.
-  def self.join(path, *args)
+  def self.join(path, args)
     # raise("oops")
     # NB, see how Nim can handle splat arguments. Maybe need to pass in an array
 

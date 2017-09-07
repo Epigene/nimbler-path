@@ -10,46 +10,45 @@ class NimblerPathTest < Minitest::Test
     # if path is root, return nil
     assert_nil(NimblerPath.chop_basename("/")) 
 
+    # if path is absent, return nil
+    assert_nil(NimblerPath.chop_basename("")) 
+
     # if path is a file or directory, split on last dir separator
-    v1, v2 = NimblerPath.chop_basename("/path/to/dir")
+    v1, v2 = NimblerPath.chop_basename("/path/to/ā")
     assert_equal("/path/to/", v1)
-    assert_equal("dir", v2) 
+    assert_equal("ā", v2) 
 
     # if path is a directory with trailing slash, split on last dir separator
-    v1, v2 = NimblerPath.chop_basename("/path/to/dir/")
-    assert_equal("/path/to/", v1)
-    assert_equal("dir", v2) 
-
-    v1, v2 = NimblerPath.chop_basename("/path/to/file.rb")
-    assert_equal("/path/to/", v1)
-    assert_equal("file.rb", v2) 
+    v1, v2 = NimblerPath.chop_basename("/path/tī/ā/")
+    assert_equal("/path/tī/", v1)
+    assert_equal("ā", v2) 
   end
 
-  def test_absolute?
+  def test_absolute
     # It returns +true+ if the pathname begins with a slash.
   
     assert_equal(
       true,
-      NimblerPath.absolute?('/im/sure')
+      NimblerPath.absolute('/im/sure')
     )
   
     assert_equal(
       false,
-      NimblerPath.absolute?('not/so/sure')
+      NimblerPath.absolute('not/so/sure')
     )
   end
   
-  def test_relative?
+  def test_relative
     # It returns +false+ if the pathname begins with a slash.
   
     assert_equal(
       false,
-      NimblerPath.relative?('/im/sure')
+      NimblerPath.relative('/im/sure')
     )
     
     assert_equal(
       true,
-      NimblerPath.relative?('not/so/sure')
+      NimblerPath.relative('not/so/sure')
     )
   end
 
@@ -91,7 +90,7 @@ class NimblerPathTest < Minitest::Test
     assert_equal("/usr/some/dir/file.rb", NimblerPath.plus("/usr/some/other", "../dir/file.rb"))  
 
     # correctly parses .. and . in both args
-    assert_equal("./usr/some/dir/file.rb", NimblerPath.plus("./usr/some/other", "../dir/file.rb"))  
+    assert_equal("./usr/somč/dā/īle.rb", NimblerPath.plus("./usr/somč/other", "../dā/īle.rb"))  
 
     # correctly parses several leading .. in second arg to cut the end of first
     assert_equal("usr/dir/file.rb", NimblerPath.plus("usr/some/other", "../../dir/file.rb")) 

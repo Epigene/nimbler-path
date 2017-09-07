@@ -25,7 +25,7 @@ module NimblerPath
         def absolute?
           puts ">> In monkeypatched #absolute?"
           # old_absolute?
-          NimblerPath.absolute?(@path)
+          NimblerPath.absolute(@path)
         end
 
         # Pathname#relative? @ https://goo.gl/QK4PCs called ?? times.
@@ -33,7 +33,7 @@ module NimblerPath
         def relative?
           puts ">> In monkeypatched #relative?"
           # old_relative?
-          NimblerPath.relative?(@path)
+          NimblerPath.relative(@path)
         end
 
         # Pathname#+ @ https://goo.gl/W7biJu called 4606 times.
@@ -58,7 +58,7 @@ module NimblerPath
         def join(*args)
           puts ">> In monkeypatched #join"
           # old_join(*args)
-          NimblerPath.join(self, *args)
+          NimblerPath.join(self, args)
         end
 
       end
