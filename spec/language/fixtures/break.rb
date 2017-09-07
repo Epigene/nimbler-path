@@ -89,7 +89,7 @@ module BreakSpecs
         break :break
         note :c
       }
-      note :cc
+      note :c
       note call_method(b)
       note :d
     end
@@ -101,7 +101,7 @@ module BreakSpecs
         break :break
         note :c
       }
-      note :cc
+      note :c
       note yielding(&b)
       note :d
     end

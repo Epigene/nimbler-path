@@ -40,6 +40,12 @@ describe "String#start_with?" do
   end
 
   it "works for multibyte strings" do
-    "céréale".start_with?("cér").should be_true
+    old_kcode = $KCODE
+    begin
+      $KCODE = "UTF-8"
+      "céréale".start_with?("cér").should be_true
+    ensure
+      $KCODE = old_kcode
+    end
   end
 end

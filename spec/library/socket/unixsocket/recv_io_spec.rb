@@ -20,7 +20,7 @@ describe "UNIXSocket#recv_io" do
       @file.close
       @client.close
       @server.close
-      SocketSpecs.rm_socket @path
+      rm_r @path
     end
 
     it "reads an IO object across the socket" do

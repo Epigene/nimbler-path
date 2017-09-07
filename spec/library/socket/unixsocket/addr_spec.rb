@@ -6,6 +6,8 @@ describe "UNIXSocket#addr" do
   platform_is_not :windows do
     before :each do
       @path = SocketSpecs.socket_path
+      rm_r @path
+
       @server = UNIXServer.open(@path)
       @client = UNIXSocket.open(@path)
     end
@@ -13,7 +15,7 @@ describe "UNIXSocket#addr" do
     after :each do
       @client.close
       @server.close
-      SocketSpecs.rm_socket @path
+      rm_r @path
     end
 
     it "returns the address family of this socket in an array" do

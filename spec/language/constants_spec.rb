@@ -129,9 +129,7 @@ describe "Literal (A::X) constant resolution" do
       ConstantSpecs::ClassB::CS_CONST109 = :const109_1
       ConstantSpecs::ClassB::CS_CONST109.should == :const109_1
 
-      -> {
-        ConstantSpecs::ClassB::CS_CONST109 = :const109_2
-      }.should complain(/already initialized constant/)
+      ConstantSpecs::ClassB::CS_CONST109 = :const109_2
       ConstantSpecs::ClassB::CS_CONST109.should == :const109_2
     end
 
@@ -327,9 +325,7 @@ describe "Constant resolution within methods" do
       ConstantSpecs::ContainerB::ChildB.const213.should == :const213_1
       ConstantSpecs::ContainerB::ChildB.new.const213.should == :const213_1
 
-      -> {
-        ConstantSpecs::ParentB::CS_CONST213 = :const213_2
-      }.should complain(/already initialized constant/)
+      ConstantSpecs::ParentB::CS_CONST213 = :const213_2
       ConstantSpecs::ContainerB::ChildB.const213.should == :const213_2
       ConstantSpecs::ContainerB::ChildB.new.const213.should == :const213_2
     end
@@ -398,9 +394,7 @@ describe "Module#private_constant marked constants" do
     mod = Module.new
     mod.const_set :Foo, true
     mod.send :private_constant, :Foo
-    -> {
-      mod.const_set :Foo, false
-    }.should complain(/already initialized constant/)
+    mod.const_set :Foo, false
 
     lambda {mod::Foo}.should raise_error(NameError)
   end

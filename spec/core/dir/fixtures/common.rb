@@ -14,17 +14,22 @@ module DirSpecs
 
   # TODO: make these relative to the mock_dir
   def self.clear_dirs
-    [ 'nonexisting',
-      'default_perms',
-      'reduced',
-      'always_returns_0',
-      '???',
-      [0xe9].pack('U')
-    ].each do |dir|
-      begin
-        Dir.rmdir dir
-      rescue
+    begin
+      kcode, $KCODE = $KCODE, 'u'
+      [ 'nonexisting',
+        'default_perms',
+        'reduced',
+        'always_returns_0',
+        '???',
+        [0xe9].pack('U')
+      ].each do |dir|
+        begin
+          Dir.rmdir dir
+        rescue
+        end
       end
+    ensure
+      $KCODE = kcode
     end
   end
 

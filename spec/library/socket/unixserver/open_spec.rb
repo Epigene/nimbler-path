@@ -6,13 +6,14 @@ describe "UNIXServer.open" do
 
   platform_is_not :windows do
     before :each do
-      @path = SocketSpecs.socket_path
+      @path = tmp("unixserver_spec")
+      rm_r @path
     end
 
     after :each do
       @server.close if @server
       @server = nil
-      SocketSpecs.rm_socket @path
+      rm_r @path
     end
 
     it "yields the new UNIXServer object to the block, if given" do

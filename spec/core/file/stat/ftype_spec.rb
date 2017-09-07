@@ -1,11 +1,7 @@
 require "#{File.dirname(__FILE__)}/../../../spec_helper"
-require "#{File.dirname(__FILE__)}/../fixtures/file_types"
+require "#{File.dirname(__FILE__)}/../fixtures/file_types.rb"
 
 describe "File::Stat#ftype" do
-  before :all do
-    FileSpecs.configure_types
-  end
-
   it "returns a String" do
     FileSpecs.normal_file do |file|
       File.lstat(file).ftype.should be_kind_of(String)
@@ -66,3 +62,4 @@ describe "File::Stat#ftype" do
     end
   end
 end
+

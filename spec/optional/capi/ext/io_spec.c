@@ -1,28 +1,22 @@
 #include "ruby.h"
 #include "rubyspec.h"
 #include "ruby/io.h"
-#include <errno.h>
 #include <fcntl.h>
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 static int set_non_blocking(int fd) {
-#if defined(O_NONBLOCK) && defined(F_GETFL)
-  int flags = fcntl(fd, F_GETFL, 0);
-  if (flags == -1)
+  int flags;
+#if defined(O_NONBLOCK)
+  if (-1 == (flags = fcntl(fd, F_GETFL, 0)))
     flags = 0;
   return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-#elif defined(FIOBIO)
-  int flags = 1;
-  return ioctl(fd, FIOBIO, &flags);
 #else
-  errno = ENOSYS;
-  return -1;
+  flags = 1;
+  return ioctl(fd, FIOBIO, &flags);
 #endif
 }
 
@@ -134,46 +128,45 @@ VALUE io_spec_rb_io_taint_check(VALUE self, VALUE io) {
 }
 #endif
 
+typedef int wait_bool;
+#define wait_bool_to_ruby_bool(x) (x ? Qtrue : Qfalse)
+
 #ifdef HAVE_RB_IO_WAIT_READABLE
 #define RB_IO_WAIT_READABLE_BUF 13
 
 VALUE io_spec_rb_io_wait_readable(VALUE self, VALUE io, VALUE read_p) {
   int fd = io_spec_get_fd(io);
   char buf[RB_IO_WAIT_READABLE_BUF];
-  int ret, r, saved_errno;
+  wait_bool ret;
 
-  if (set_non_blocking(fd) == -1)
-    rb_sys_fail("set_non_blocking failed");
+  set_non_blocking(fd);
 
   if(RTEST(read_p)) {
-    if (read(fd, buf, RB_IO_WAIT_READABLE_BUF) != -1) {
+    rb_ivar_set(self, rb_intern("@write_data"), Qtrue);
+    if(read(fd, buf, RB_IO_WAIT_READABLE_BUF) != -1) {
       return Qnil;
     }
-    saved_errno = errno;
-    rb_ivar_set(self, rb_intern("@write_data"), Qtrue);
-    errno = saved_errno;
   }
 
   ret = rb_io_wait_readable(fd);
 
   if(RTEST(read_p)) {
-    r = read(fd, buf, RB_IO_WAIT_READABLE_BUF);
-    if (r != RB_IO_WAIT_READABLE_BUF) {
-      perror("read");
-      return INT2FIX(r);
+    if(read(fd, buf, RB_IO_WAIT_READABLE_BUF) != 13) {
+      return Qnil;
     }
     rb_ivar_set(self, rb_intern("@read_data"),
         rb_str_new(buf, RB_IO_WAIT_READABLE_BUF));
   }
 
-  return ret ? Qtrue : Qfalse;
+  return wait_bool_to_ruby_bool(ret);
 }
 #endif
 
 #ifdef HAVE_RB_IO_WAIT_WRITABLE
 VALUE io_spec_rb_io_wait_writable(VALUE self, VALUE io) {
-  int ret = rb_io_wait_writable(io_spec_get_fd(io));
-  return ret ? Qtrue : Qfalse;
+  wait_bool ret;
+  ret = rb_io_wait_writable(io_spec_get_fd(io));
+  return wait_bool_to_ruby_bool(ret);
 }
 #endif
 

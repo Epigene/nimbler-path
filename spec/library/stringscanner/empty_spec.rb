@@ -7,14 +7,19 @@ describe "StringScanner#empty?" do
 
   it "warns in verbose mode that the method is obsolete" do
     s = StringScanner.new("abc")
-    lambda {
-      $VERBOSE = true
-      s.empty?
-    }.should complain(/empty?.*obsolete.*eos?/)
+    begin
+      old = $VERBOSE
+      lambda {
+        $VERBOSE = true
+        s.empty?
+      }.should complain(/empty?.*obsolete.*eos?/)
 
-    lambda {
-      $VERBOSE = false
-      s.empty?
-    }.should_not complain
+      lambda {
+        $VERBOSE = false
+        s.empty?
+      }.should_not complain
+    ensure
+      $VERBOSE = old
+    end
   end
 end

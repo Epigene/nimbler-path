@@ -24,22 +24,21 @@ describe :io_new, shared: true do
   end
 
   it "creates an IO instance when STDOUT is closed" do
-    verbose, $VERBOSE = $VERBOSE, nil
     stdout = STDOUT
     stdout_file = tmp("stdout.txt")
+    STDOUT = new_io stdout_file
+    STDOUT.close
 
     begin
       @io = IO.send(@method, @fd, "w")
       @io.should be_an_instance_of(IO)
     ensure
       STDOUT = stdout
-      $VERBOSE = verbose
       rm_r stdout_file
     end
   end
 
   it "creates an IO instance when STDERR is closed" do
-    verbose, $VERBOSE = $VERBOSE, nil
     stderr = STDERR
     stderr_file = tmp("stderr.txt")
     STDERR = new_io stderr_file
@@ -50,7 +49,6 @@ describe :io_new, shared: true do
       @io.should be_an_instance_of(IO)
     ensure
       STDERR = stderr
-      $VERBOSE = verbose
       rm_r stderr_file
     end
   end
@@ -114,17 +112,13 @@ describe :io_new, shared: true do
     @io.external_encoding.should == Encoding::ISO_8859_1
   end
 
-  it "ignores the :encoding option when the :external_encoding option is present" do
-    lambda {
-      @io = IO.send(@method, @fd, 'w', {external_encoding: 'utf-8', encoding: 'iso-8859-1:iso-8859-1'})
-    }.should complain(/Ignoring encoding parameter/)
+  it "ingores the :encoding option when the :external_encoding option is present" do
+    @io = IO.send(@method, @fd, 'w', {external_encoding: 'utf-8', encoding: 'iso-8859-1:iso-8859-1'})
     @io.external_encoding.to_s.should == 'UTF-8'
   end
 
-  it "ignores the :encoding option when the :internal_encoding option is present" do
-    lambda {
-      @io = IO.send(@method, @fd, 'w', {internal_encoding: 'ibm866', encoding: 'iso-8859-1:iso-8859-1'})
-    }.should complain(/Ignoring encoding parameter/)
+  it "ingores the :encoding option when the :internal_encoding option is present" do
+    @io = IO.send(@method, @fd, 'w', {internal_encoding: 'ibm866', encoding: 'iso-8859-1:iso-8859-1'})
     @io.internal_encoding.to_s.should == 'IBM866'
   end
 

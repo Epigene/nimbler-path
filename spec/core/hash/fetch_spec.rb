@@ -23,10 +23,7 @@ describe "Hash#fetch" do
   end
 
   it "gives precedence to the default block over the default argument when passed both" do
-    lambda {
-      @result = {}.fetch(9, :foo) { |i| i * i }
-    }.should complain(/block supersedes default value argument/)
-    @result.should == 81
+    {}.fetch(9, :foo) { |i| i * i }.should == 81
   end
 
   it "raises an ArgumentError when not passed one or two arguments" do

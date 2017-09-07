@@ -11,10 +11,20 @@ describe "Kernel#frozen?" do
   end
 
   describe "on true, false and nil" do
-    it "returns true" do
-      true.frozen?.should be_true
-      false.frozen?.should be_true
-      nil.frozen?.should be_true
+    ruby_version_is ""..."2.2" do
+      it "returns false" do
+        true.frozen?.should be_false
+        false.frozen?.should be_false
+        nil.frozen?.should be_false
+      end
+    end
+
+    ruby_version_is "2.2" do
+      it "returns true" do
+        true.frozen?.should be_true
+        false.frozen?.should be_true
+        nil.frozen?.should be_true
+      end
     end
   end
 

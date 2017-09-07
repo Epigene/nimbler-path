@@ -44,7 +44,13 @@ describe "String#end_with?" do
   end
 
   it "works for multibyte strings" do
-    "céréale".end_with?("réale").should be_true
+    old_kcode = $KCODE
+    begin
+      $KCODE = "UTF-8"
+      "céréale".end_with?("réale").should be_true
+    ensure
+      $KCODE = old_kcode
+    end
   end
 
 end

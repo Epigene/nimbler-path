@@ -8,9 +8,9 @@ module NetFTPSpecs
     # port number
     attr_reader :server_port
 
-    def initialize
-      @hostname = "localhost"
-      @server = TCPServer.new(@hostname, 0)
+    def initialize(hostname = "localhost", server_port = 0)
+      @hostname = hostname
+      @server = TCPServer.new(@hostname, server_port)
       @server_port = @server.addr[1]
 
       @handlers = {}
@@ -35,7 +35,10 @@ module NetFTPSpecs
       response @connect_message || "220 Dummy FTP Server ready!"
 
       begin
-        while command = @socket.recv(1024)
+        loop do
+          command = @socket.recv(1024)
+          break if command.nil?
+
           command, argument = command.chomp.split(" ", 2)
 
           if command == "QUIT"

@@ -128,7 +128,6 @@ describe "Module#autoload" do
 
     ModuleSpecs::Autoload.autoload :S, filename
     ModuleSpecs::Autoload.autoload?(:S).should be_nil
-    ModuleSpecs::Autoload.send(:remove_const, :S)
   end
 
   it "retains the autoload even if the request to require fails" do
@@ -289,12 +288,9 @@ describe "Module#autoload" do
   end
 
   it "shares the autoload request across dup'ed copies of modules" do
-    require fixture(__FILE__, "autoload_s.rb")
     filename = fixture(__FILE__, "autoload_t.rb")
     mod1 = Module.new { autoload :T, filename }
-    lambda {
-      ModuleSpecs::Autoload::S = mod1
-    }.should complain(/already initialized constant/)
+    ModuleSpecs::Autoload::S = mod1
     mod2 = mod1.dup
 
     mod1.autoload?(:T).should == filename
@@ -401,57 +397,6 @@ describe "Module#autoload" do
       ModuleSpecs::Autoload::LoadPath.loaded.should == :autoload_load_path
     end
 
-  end
-
-  describe "(concurrently)" do
-    ruby_bug "#10892", ""..."2.3" do
-      it "blocks others threads while doing an autoload" do
-        file_path     = fixture(__FILE__, "repeated_concurrent_autoload.rb")
-        autoload_path = file_path.sub(/\.rb\Z/, '')
-        mod_count     = 30
-        thread_count  = 16
-
-        mod_names = []
-        mod_count.times do |i|
-          mod_name = :"Mod#{i}"
-          Object.autoload mod_name, autoload_path
-          mod_names << mod_name
-        end
-
-        barrier = ModuleSpecs::CyclicBarrier.new thread_count
-        ScratchPad.record ModuleSpecs::ThreadSafeCounter.new
-
-        threads = (1..thread_count).map do
-          Thread.new do
-            mod_names.each do |mod_name|
-              break false unless barrier.enabled?
-
-              was_last_one_in = barrier.await # wait for all threads to finish the iteration
-              # clean up so we can autoload the same file again
-              $LOADED_FEATURES.delete(file_path) if was_last_one_in && $LOADED_FEATURES.include?(file_path)
-              barrier.await # get ready for race
-
-              begin
-                Object.const_get(mod_name).foo
-              rescue NoMethodError
-                barrier.disable!
-                break false
-              end
-            end
-          end
-        end
-
-        # check that no thread got a NoMethodError because of partially loaded module
-        threads.all? {|t| t.value}.should be_true
-
-        # check that the autoloaded file was evaled exactly once
-        ScratchPad.recorded.get.should == mod_count
-
-        mod_names.each do |mod_name|
-          Object.send(:remove_const, mod_name)
-        end
-      end
-    end
   end
 
   it "loads the registered constant even if the constant was already loaded by another thread" do

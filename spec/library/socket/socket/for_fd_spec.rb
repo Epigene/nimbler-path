@@ -4,9 +4,8 @@ require 'socket'
 
 describe "Socket.for_fd" do
   before :each do
-    @server = TCPServer.new("127.0.0.1", 0)
-    @port = @server.addr[1]
-    @client = TCPSocket.open("127.0.0.1", @port)
+    @server = TCPServer.new("127.0.0.1", SocketSpecs.port)
+    @client = TCPSocket.open("127.0.0.1", SocketSpecs.port)
   end
 
   after :each do

@@ -4,9 +4,8 @@ require File.expand_path('../../fixtures/classes', __FILE__)
 describe "Socket::IPSocket#recvfrom" do
 
   before :each do
-    @server = TCPServer.new("127.0.0.1", 0)
-    @port = @server.addr[1]
-    @client = TCPSocket.new("127.0.0.1", @port)
+    @server = TCPServer.new("127.0.0.1", SocketSpecs.port)
+    @client = TCPSocket.new("127.0.0.1", SocketSpecs.port)
   end
 
   after :each do
@@ -18,11 +17,8 @@ describe "Socket::IPSocket#recvfrom" do
     data = nil
     t = Thread.new do
       client = @server.accept
-      begin
-        data = client.recvfrom(6)
-      ensure
-        client.close
-      end
+      data = client.recvfrom(6)
+      client.close
     end
 
     @client.send('hello', 0)
@@ -37,11 +33,8 @@ describe "Socket::IPSocket#recvfrom" do
     data = nil
     t = Thread.new do
       client = @server.accept
-      begin
-        data = client.recvfrom(3)
-      ensure
-        client.close
-      end
+      data = client.recvfrom(3)
+      client.close
     end
 
     @client.send('hello', 0)

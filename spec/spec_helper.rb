@@ -3,18 +3,6 @@ root = File.dirname(__FILE__)
 dir = "fixtures/code"
 CODE_LOADING_DIR = use_realpath ? File.realpath(dir, root) : File.expand_path(dir, root)
 
-require "pry"
-
-# injecting NimblerPath
-$LOAD_PATH.unshift(
-  File.expand_path('../../lib', __FILE__)
-)
-
-require 'nimbler_path'
-require 'nimbler_path/monkeypatch'
-
-NimblerPath.apply_monkeypatch!
-
 # Running directly with ruby some_spec.rb
 unless ENV['MSPEC_RUNNER']
   begin

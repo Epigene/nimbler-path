@@ -49,7 +49,8 @@ describe "Kernel#autoload" do
   end
 
   it "can autoload in instance_eval" do
-    Object.new.instance_eval do
+    instance_eval do
+      # this instance_eval is not needed because specs are run in instance_eval
       autoload :KSAutoloadD, fixture(__FILE__, "autoload_d.rb")
       KSAutoloadD.loaded.should == :ksautoload_d
     end

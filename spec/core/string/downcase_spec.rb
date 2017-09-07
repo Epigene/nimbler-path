@@ -22,12 +22,6 @@ describe "String#downcase" do
     end
   end
 
-  ruby_version_is '2.4' do
-    it "works for all of Unicode" do
-      "ÄÖÜ".downcase.should == "äöü"
-    end
-  end
-
   it "taints result when self is tainted" do
     "".taint.downcase.tainted?.should == true
     "x".taint.downcase.tainted?.should == true

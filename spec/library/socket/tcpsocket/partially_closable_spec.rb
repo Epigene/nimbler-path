@@ -5,8 +5,9 @@ require File.expand_path('../../shared/partially_closable_sockets', __FILE__)
 describe "TCPSocket partial closability" do
 
   before :each do
-    @server = TCPServer.new("127.0.0.1", 0)
-    @s1 = TCPSocket.new("127.0.0.1", @server.addr[1])
+    port = SocketSpecs.find_available_port
+    @server = TCPServer.new("127.0.0.1", port)
+    @s1 = TCPSocket.new("127.0.0.1", port)
     @s2 = @server.accept
   end
 

@@ -3,6 +3,14 @@ require File.expand_path('../../../spec_helper', __FILE__)
 require File.expand_path('../fixtures/classes.rb', __FILE__)
 
 describe "String#scan" do
+  before :each do
+    @kcode = $KCODE
+  end
+
+  after :each do
+    $KCODE = @kcode
+  end
+
   it "returns an array containing all matches" do
     "cruel world".scan(/\w+/).should == ["cruel", "world"]
     "cruel world".scan(/.../).should == ["cru", "el ", "wor"]
@@ -12,9 +20,12 @@ describe "String#scan" do
     "".scan(//).should == [""]
   end
 
-  it "respects unicode when the pattern collapses to nothing" do
+  it "respects $KCODE when the pattern collapses to nothing" do
     str = "こにちわ"
     reg = %r!!
+
+    $KCODE = "utf-8"
+
     str.scan(reg).should == ["", "", "", "", ""]
   end
 

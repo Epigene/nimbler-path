@@ -28,9 +28,7 @@ describe :kernel_String, shared: true do
 
   it "raises a TypeError if #to_s does not exist" do
     obj = mock('to_s')
-    class << obj
-      undef_method :to_s
-    end
+    obj.undefine(:to_s)
 
     lambda { @object.send(@method, obj) }.should raise_error(TypeError)
   end
@@ -38,11 +36,7 @@ describe :kernel_String, shared: true do
   # #5158
   it "raises a TypeError if respond_to? returns false for #to_s" do
     obj = mock("to_s")
-    class << obj
-      def respond_to?(meth, include_private=false)
-        meth == :to_s ? false : super
-      end
-    end
+    obj.does_not_respond_to(:to_s)
 
     lambda { @object.send(@method, obj) }.should raise_error(TypeError)
   end
@@ -50,24 +44,16 @@ describe :kernel_String, shared: true do
   it "raises a TypeError if #to_s is not defined, even though #respond_to?(:to_s) returns true" do
     # cannot use a mock because of how RSpec affects #method_missing
     obj = Object.new
-    class << obj
-      undef_method :to_s
-      def respond_to?(meth, include_private=false)
-        meth == :to_s ? true : super
-      end
-    end
+    obj.undefine(:to_s)
+    obj.responds_to(:to_s)
 
     lambda { @object.send(@method, obj) }.should raise_error(TypeError)
   end
 
   it "calls #to_s if #respond_to?(:to_s) returns true" do
     obj = mock('to_s')
-    class << obj
-      undef_method :to_s
-      def method_missing(meth, *args)
-        meth == :to_s ? "test" : super
-      end
-    end
+    obj.undefine(:to_s)
+    obj.fake!(:to_s, "test")
 
     @object.send(@method, obj).should == "test"
   end

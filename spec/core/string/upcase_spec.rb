@@ -22,12 +22,6 @@ describe "String#upcase" do
     end
   end
 
-  ruby_version_is '2.4' do
-    it "works for all of Unicode" do
-      "äöü".upcase.should == "ÄÖÜ"
-    end
-  end
-
   it "taints result when self is tainted" do
     "".taint.upcase.tainted?.should == true
     "X".taint.upcase.tainted?.should == true

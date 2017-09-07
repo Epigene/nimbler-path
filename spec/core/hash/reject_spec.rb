@@ -26,15 +26,17 @@ describe "Hash#reject" do
     h.reject { false }.to_a.should == [[1, 2]]
   end
 
-  context "with extra state" do
-    it "returns Hash instance for subclasses" do
-      HashSpecs::MyHash[1 => 2, 3 => 4].reject { false }.should be_kind_of(Hash)
-      HashSpecs::MyHash[1 => 2, 3 => 4].reject { true }.should be_kind_of(Hash)
-    end
+  ruby_version_is "2.2" do
+    context "with extra state" do
+      it "returns Hash instance for subclasses" do
+        HashSpecs::MyHash[1 => 2, 3 => 4].reject { false }.should be_kind_of(Hash)
+        HashSpecs::MyHash[1 => 2, 3 => 4].reject { true }.should be_kind_of(Hash)
+      end
 
-    it "does not taint the resulting hash" do
-      h = { a: 1 }.taint
-      h.reject {false}.tainted?.should == false
+      it "does not taint the resulting hash" do
+        h = { a: 1 }.taint
+        h.reject {false}.tainted?.should == false
+      end
     end
   end
 

@@ -42,10 +42,6 @@ describe "YAML.dump" do
 
   it "dumps a File without any state" do
     file = File.new(__FILE__)
-    begin
-      YAML.dump(file).should match_yaml("--- !ruby/object:File {}\n")
-    ensure
-      file.close
-    end
+    YAML.dump(file).should match_yaml("--- !ruby/object:File {}\n")
   end
 end

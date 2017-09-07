@@ -101,7 +101,11 @@ describe :strftime_date, shared: true do
     @d2000_4_6.strftime("%S").should == "00"
   end
 
-  it "should be able to show the number of seconds since the unix epoch for a date" do
+  it "should be able to show the number of seconds with leading zeroes" do
+    @d2000_4_6.strftime("%S").should == "00"
+  end
+
+  it "should be able to show the number of seconds since the unix epoch" do
     @d2000_4_6.strftime("%s").should == "954979200"
   end
 
@@ -167,7 +171,7 @@ describe :strftime_date, shared: true do
     @d2000_4_10.strftime("%u").should == "1"
   end
 
-  it "should be able to show the commercial week with %V" do
+  it "should be able to show the commercial week" do
     @d2000_4_9.strftime("%V").should == "14"
     @d2000_4_10.strftime("%V").should == "15"
   end
@@ -214,12 +218,12 @@ describe :strftime_date, shared: true do
     @d2000_4_6.strftime("%F").should == @d2000_4_6.strftime('%Y-%m-%d')
   end
 
-  it "should be able to show HH:MM for a date" do
+  it "should be able to show HH:MM" do
     @d2000_4_6.strftime("%R").should == "00:00"
     @d2000_4_6.strftime("%R").should == @d2000_4_6.strftime('%H:%M')
   end
 
-  it "should be able to show HH:MM:SS AM/PM for a date" do
+  it "should be able to show HH:MM:SS AM/PM" do
     @d2000_4_6.strftime("%r").should == "12:00:00 AM"
     @d2000_4_6.strftime("%r").should == @d2000_4_6.strftime('%I:%M:%S %p')
   end

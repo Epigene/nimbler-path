@@ -172,13 +172,13 @@ describe "Random#rand with Range" do
   end
 
   it "works with inclusive ranges" do
-    prng = Random.new 33
+    prng = Random.new
     r = 3..5
     40.times.map { prng.rand(r) }.uniq.sort.should == [3,4,5]
   end
 
   it "works with exclusive ranges" do
-    prng = Random.new 33
+    prng = Random.new
     r = 3...5
     20.times.map { prng.rand(r) }.uniq.sort.should == [3,4]
   end

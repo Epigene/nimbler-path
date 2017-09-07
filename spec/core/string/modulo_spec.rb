@@ -14,18 +14,9 @@ describe "String#%" do
     ("%d%% %s" % [10, "of chickens!"]).should == "10% of chickens!"
   end
 
-  ruby_version_is ""..."2.5" do
-    it "formats single % character at the end as literal %" do
-      ("%" % []).should == "%"
-      ("foo%" % []).should == "foo%"
-    end
-  end
-
-  ruby_version_is "2.5" do
-    it "raises an error if single % appears at the end" do
-      lambda { ("%" % []) }.should raise_error(ArgumentError)
-      lambda { ("foo%" % [])}.should raise_error(ArgumentError)
-    end
+  it "formats single % character at the end as literal %" do
+    ("%" % []).should == "%"
+    ("foo%" % []).should == "foo%"
   end
 
   it "formats single % character before a newline as literal %" do
@@ -307,7 +298,6 @@ describe "String#%" do
     ("%*b" % [10, 6]).should == "       110"
     ("%*b" % [-10, 6]).should == "110       "
     ("%.4b" % 2).should == "0010"
-    ("%.32b" % 2147483648).should == "10000000000000000000000000000000"
   end
 
   it "supports binary formats using %b for negative numbers" do
@@ -534,7 +524,6 @@ describe "String#%" do
     ("%-22p" % 10).should == "10                    "
     ("%*p" % [10, 10]).should == "        10"
     ("%p" % {capture: 1}).should == "{:capture=>1}"
-    ("%p" % "str").should == "\"str\""
   end
 
   it "calls inspect on arguments for %p format" do

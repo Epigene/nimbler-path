@@ -143,6 +143,22 @@ describe "The defined? keyword when called with a method name" do
     end
   end
 
+  describe "having a class variable as receiver" do
+    it "returns 'method' if the method is defined" do
+      @@defined_specs_obj = DefinedSpecs::Basic.new
+      defined?(@@defined_specs_obj.a_defined_method).should == "method"
+    end
+
+    it "returns nil if the method is not defined" do
+      @@defined_specs_obj = DefinedSpecs::Basic.new
+      defined?(@@defined_specs_obj.an_undefined_method).should be_nil
+    end
+
+    it "returns nil if the variable does not exist" do
+      defined?(@@nonexistent_class_variable.some_method).should be_nil
+    end
+  end
+
   describe "having a method call as a receiver" do
     it "returns nil if evaluating the receiver raises an exception" do
       defined?(DefinedSpecs.exception_method / 2).should be_nil
@@ -275,10 +291,7 @@ describe "The defined? keyword for an expression" do
     end
 
     it "returns nil for an expression with '!' and an unset class variable" do
-      -> {
-        @result = defined?(!@@defined_specs_undefined_class_variable)
-      }.should complain(/class variable access from toplevel/)
-      @result.should be_nil
+      defined?(!@@defined_specs_undefined_class_variable).should be_nil
     end
 
     it "returns nil for an expression with 'not' and an undefined method" do
@@ -286,10 +299,7 @@ describe "The defined? keyword for an expression" do
     end
 
     it "returns nil for an expression with 'not' and an unset class variable" do
-      -> {
-        @result = defined?(not @@defined_specs_undefined_class_variable)
-      }.should complain(/class variable access from toplevel/)
-      @result.should be_nil
+      defined?(not @@defined_specs_undefined_class_variable).should be_nil
     end
 
     it "does not propagate an exception raised by a method in a 'not' expression" do
@@ -881,51 +891,45 @@ end
 
 describe "The defined? keyword for a variable scoped constant" do
   after :all do
-    if Object.class_variable_defined? :@@defined_specs_obj
-      Object.__send__(:remove_class_variable, :@@defined_specs_obj)
-    end
+    Object.__send__(:remove_class_variable, :@@defined_specs_obj)
   end
 
-  it "returns nil if the instance scoped constant is not defined" do
+  it "returns nil if the scoped constant is not defined" do
     @defined_specs_obj = DefinedSpecs::Basic
     defined?(@defined_specs_obj::Undefined).should be_nil
   end
 
-  it "returns 'constant' if the constant is defined in the scope of the instance variable" do
+  it "returns 'constant' if the constant is defined in the scope of the variable reference" do
     @defined_specs_obj = DefinedSpecs::Basic
     defined?(@defined_specs_obj::A).should == "constant"
   end
 
-  it "returns nil if the global scoped constant is not defined" do
+  it "returns nil if the scoped constant is not defined" do
     $defined_specs_obj = DefinedSpecs::Basic
     defined?($defined_specs_obj::Undefined).should be_nil
   end
 
-  it "returns 'constant' if the constant is defined in the scope of the global variable" do
+  it "returns 'constant' if the constant is defined in the scope of the variable reference" do
     $defined_specs_obj = DefinedSpecs::Basic
     defined?($defined_specs_obj::A).should == "constant"
   end
 
-  it "returns nil if the class scoped constant is not defined" do
-    -> {
-      @@defined_specs_obj = DefinedSpecs::Basic
-      defined?(@@defined_specs_obj::Undefined).should be_nil
-    }.should complain(/class variable access from toplevel/)
+  it "returns nil if the scoped constant is not defined" do
+    @@defined_specs_obj = DefinedSpecs::Basic
+    defined?(@@defined_specs_obj::Undefined).should be_nil
   end
 
-  it "returns 'constant' if the constant is defined in the scope of the class variable" do
-    -> {
-      @@defined_specs_obj = DefinedSpecs::Basic
-      defined?(@@defined_specs_obj::A).should == "constant"
-    }.should complain(/class variable access from toplevel/)
+  it "returns 'constant' if the constant is defined in the scope of the variable reference" do
+    @@defined_specs_obj = DefinedSpecs::Basic
+    defined?(@@defined_specs_obj::A).should == "constant"
   end
 
-  it "returns nil if the local scoped constant is not defined" do
+  it "returns nil if the scoped constant is not defined" do
     defined_specs_obj = DefinedSpecs::Basic
     defined?(defined_specs_obj::Undefined).should be_nil
   end
 
-  it "returns 'constant' if the constant is defined in the scope of the local variable" do
+  it "returns 'constant' if the constant is defined in the scope of the variable reference" do
     defined_specs_obj = DefinedSpecs::Basic
     defined?(defined_specs_obj::A).should == "constant"
   end

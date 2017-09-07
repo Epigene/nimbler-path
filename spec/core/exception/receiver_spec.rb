@@ -29,9 +29,7 @@ ruby_version_is "2.3" do
 
     it "returns the Object class when an undefined class variable is called" do
       -> {
-        -> {
-          @@doesnt_exist
-        }.should complain(/class variable access from toplevel/)
+        @@doesnt_exist
       }.should raise_error(NameError) {|e| e.receiver.should equal(Object) }
     end
 

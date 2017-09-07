@@ -165,32 +165,49 @@ describe "An instance method with a default argument" do
     foo(2,3,3).should == [2,3,[3]]
   end
 
-  it "shadows an existing method with the same name as the local" do
-    def bar
-      1
-    end
-    -> {
-      eval "def foo(bar = bar)
+  ruby_version_is ""..."2.2" do
+    it "calls a method with the same name as the local" do
+      def bar
+        1
+      end
+      def foo(bar = bar)
         bar
-      end"
-    }.should complain(/circular argument reference/)
-    foo.should == nil
-    foo(2).should == 2
+      end
+      foo.should == 1
+      foo(2).should == 2
+    end
   end
 
-  it "calls a method with the same name as the local when explicitly using ()" do
-    def bar
-      1
+  ruby_version_is "2.2" do
+    it "shadows an existing method with the same name as the local" do
+      def bar
+        1
+      end
+      def foo(bar = bar)
+        bar
+      end
+      foo.should == nil
+      foo(2).should == 2
     end
-    def foo(bar = bar())
-      bar
+
+    it "calls a method with the same name as the local when explicitly using ()" do
+      def bar
+        1
+      end
+      def foo(bar = bar())
+        bar
+      end
+      foo.should == 1
+      foo(2).should == 2
     end
-    foo.should == 1
-    foo(2).should == 2
   end
 end
 
 describe "A singleton method definition" do
+  after :all do
+    Object.__send__(:remove_class_variable, :@@a)
+  end
+
   it "can be declared for a local variable" do
     a = Object.new
     def a.foo
@@ -213,6 +230,14 @@ describe "A singleton method definition" do
       7
     end
     $__a__.foo.should == 7
+  end
+
+  it "can be declared for a class variable" do
+    @@a = Object.new
+    def @@a.foo
+      8
+    end
+    @@a.foo.should == 8
   end
 
   it "can be declared with an empty method body" do

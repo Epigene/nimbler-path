@@ -32,36 +32,26 @@ module KernelSpecs
   end
 
   def self.has_private_method(name)
-    IO.popen([*ruby_exe, "-n", "-e", "print Kernel.private_method_defined?(#{name.inspect})"], "r+") do |io|
-      io.puts
-      io.close_write
-      io.read
-    end == "true"
+    cmd = %[| #{RUBY_EXE} -n -e "print Kernel.private_method_defined?('#{name}')"]
+    ruby_exe("puts", args: cmd) == "true"
   end
 
   def self.chop(str, method)
-    IO.popen([*ruby_exe, "-n", "-e", "$_ = #{str.inspect}; #{method}; print $_"], "r+") do |io|
-      io.puts
-      io.close_write
-      io.read
-    end
+    cmd = "| #{RUBY_EXE} -n -e '$_ = #{str.inspect}; #{method}; print $_'"
+    ruby_exe "puts", args: cmd
+  end
+
+  def self.encoded_chop(file)
+    ruby_exe "puts", args: "| #{RUBY_EXE} -n #{file}"
   end
 
   def self.chomp(str, method, sep="\n")
-    code = "$_ = #{str.inspect}; $/ = #{sep.inspect}; #{method}; print $_"
-    IO.popen([*ruby_exe, "-n", "-e", code], "r+") do |io|
-      io.puts
-      io.close_write
-      io.read
-    end
+    cmd = "| #{RUBY_EXE} -n -e '$_ = #{str.inspect}; $/ = #{sep.inspect}; #{method}; print $_'"
+    ruby_exe "puts", args: cmd
   end
 
-  def self.run_with_dash_n(file)
-    IO.popen([*ruby_exe, "-n", file], "r+") do |io|
-      io.puts
-      io.close_write
-      io.read
-    end
+  def self.encoded_chomp(file)
+    ruby_exe "puts", args: "| #{RUBY_EXE} -n #{file}"
   end
 
   # kind_of?, is_a?, instance_of?
@@ -86,7 +76,8 @@ module KernelSpecs
   end
 
   class Method
-    public :abort, :exit, :exit!, :fork, :system
+    public :abort, :exec, :exit, :exit!, :fork, :system
+    public :spawn if respond_to?(:spawn, true)
   end
 
   class Methods
@@ -219,6 +210,22 @@ module KernelSpecs
     class << self
       define_method(:defined_block) do
         block_given?
+      end
+    end
+  end
+
+  module KernelBlockGiven
+    def self.accept_block
+      Kernel.block_given?
+    end
+
+    def self.accept_block_as_argument(&block)
+      Kernel.block_given?
+    end
+
+    class << self
+      define_method(:defined_block) do
+        Kernel.block_given?
       end
     end
   end
@@ -376,6 +383,12 @@ module KernelSpecs
 
     def to_a
       [3, 4]
+    end
+  end
+
+  class NotMatch
+    def !~(obj)
+      :foo
     end
   end
 end

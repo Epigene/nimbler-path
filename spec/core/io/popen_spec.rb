@@ -1,6 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 require File.expand_path('../fixtures/classes', __FILE__)
 
+ruby_exe = RUBY_EXE.split
+
 describe "IO.popen" do
   before :each do
     @io = nil
@@ -74,9 +76,8 @@ describe "IO.popen" do
   end
 
   it "does not throw an exception if child exited and has been waited for" do
-    @io = IO.popen([*ruby_exe, '-e', 'sleep'])
-    pid = @io.pid
-    Process.kill "KILL", pid
+    @io = IO.popen(ruby_cmd('sleep'))
+    Process.kill "KILL", @io.pid
     @io.close
     platform_is_not :windows do
       $?.signaled?.should == true
@@ -198,14 +199,14 @@ describe "IO.popen" do
     end
 
     it "accepts an Array of command and arguments" do
-      exe, *args = ruby_exe
+      exe, *args = *ruby_exe
       IO.popen({"FOO" => "bar"}, [[exe, "specfu"], *args, "-e", "puts ENV['FOO']"]) do |io|
         io.read.should == "bar\n"
       end
     end
 
     it "accepts an Array of command and arguments, and an IO mode" do
-      exe, *args = ruby_exe
+      exe, *args = *ruby_exe
       IO.popen({"FOO" => "bar"}, [[exe, "specfu"], *args, "-e", "puts ENV['FOO']"], "r") do |io|
         io.read.should == "bar\n"
       end

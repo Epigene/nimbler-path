@@ -17,6 +17,7 @@ describe :struct_equal_value, shared: true do
   end
 
   it "handles recursive structures by returning false if a difference can be found" do
+    MyClass = Struct.new(:foo)
     x = StructClasses::Car.new("Honda", "Accord", "1998")
     x[:make] = x
     stepping = StructClasses::Car.new("Honda", "Accord", "1998")

@@ -40,14 +40,29 @@ describe "Kernel#freeze" do
   end
 
   describe "on true, false and nil" do
-    it "has no effect since they are already frozen" do
-      nil.frozen?.should be_true
-      true.frozen?.should be_true
-      false.frozen?.should be_true
+    ruby_version_is ""..."2.2" do
+      it "actually freezes them" do
+        true.frozen?.should be_false
+        false.frozen?.should be_false
+        nil.frozen?.should be_false
 
-      nil.freeze
-      true.freeze
-      false.freeze
+        # Test in a separate process so as to avoid polluting
+        # the spec process with frozen true, false and nil.
+        ruby_exe("print [true, false, nil].map { |o| o.freeze; o.frozen? }").should ==
+          "[true, true, true]"
+      end
+    end
+
+    ruby_version_is "2.2" do
+      it "has no effect since they are already frozen" do
+        nil.frozen?.should be_true
+        true.frozen?.should be_true
+        false.frozen?.should be_true
+
+        nil.freeze
+        true.freeze
+        false.freeze
+      end
     end
   end
 

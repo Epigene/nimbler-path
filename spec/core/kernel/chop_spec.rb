@@ -41,7 +41,7 @@ with_feature :encoding do
 
     it "removes the final multi-byte character from $_" do
       script = fixture __FILE__, "#{@method}.rb"
-      KernelSpecs.run_with_dash_n(script).should == "あ"
+      KernelSpecs.encoded_chop(script).should == "あ"
     end
   end
 

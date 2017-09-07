@@ -67,7 +67,7 @@ module NimblerPath
 
     other = Pathname.new(other) unless Pathname === other
 
-    combo = Pathname.new("").send(:plus, path, other.to_s)
+    combo = plus(path, other.to_s)
 
     Pathname.new(combo)
   end

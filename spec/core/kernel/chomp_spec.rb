@@ -53,7 +53,7 @@ with_feature :encoding do
 
     it "removes the final carriage return, newline from a multi-byte $_" do
       script = fixture __FILE__, "#{@method}.rb"
-      KernelSpecs.run_with_dash_n(script).should == "あれ"
+      KernelSpecs.encoded_chomp(script).should == "あれ"
     end
   end
 

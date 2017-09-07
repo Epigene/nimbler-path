@@ -17,12 +17,7 @@ ruby_version_is "2.3" do
       it "passes the accessing" do
         @module.deprecate_constant :PUBLIC1
 
-        value = nil
-        lambda {
-          value = @module::PUBLIC1
-        }.should complain(@pattern)
-        value.should equal(@value)
-
+        @module::PUBLIC1.should equal(@value)
         lambda { @module::PRIVATE }.should raise_error(NameError)
       end
 

@@ -26,12 +26,6 @@ describe "String#hash" do
   it_behaves_like :resists_cve_2011_4815, '"abc"'
 end
 
-describe "Symbol#hash" do
-  ruby_bug "#13376", "2.3.0"..."2.3.4" do
-    it_behaves_like :resists_cve_2011_4815, ':a'
-  end
-end
-
 describe "Array#hash" do
   it_behaves_like :resists_cve_2011_4815, '[1, 2, 3]'
 end

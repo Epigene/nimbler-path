@@ -9,7 +9,7 @@ Gem::Specification.new do |g|
   g.date          = "2017-07-29"
   g.authors       = ["Epigene"]
   g.email         = ["augusts.bautra@gmail.com"]
-  g.required_ruby_version = ['>= 2.1.0', '< 2.5.0']
+  g.required_ruby_version = ['>= 2.1.10', '< 2.5.0']
 
   g.summary       = %q|Faster Pathname methods in Nim|
   g.description   = %q|Replaces most-used Pathname methods with Nim alternatives for speed|

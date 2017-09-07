@@ -347,12 +347,14 @@ platform_is :windows do
   end
 end
 
-describe "IO#read" do
+describe "IO#read with $KCODE set to UTF-8" do
   before :each do
     @io = IOSpecs.io_fixture "lines.txt"
+    @kcode, $KCODE = $KCODE, "utf-8"
   end
 
   after :each do
+    $KCODE = @kcode
     @io.close if @io
   end
 

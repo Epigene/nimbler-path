@@ -24,9 +24,7 @@ describe :array_index, shared: true do
   end
 
   it "ignores the block if there is an argument" do
-    -> {
-      [4, 2, 1, 5, 1, 3].send(@method, 5) {|x| x < 2}.should == 3
-    }.should complain(/given block not used/)
+    [4, 2, 1, 5, 1, 3].send(@method, 5) {|x| x < 2}.should == 3
   end
 
   describe "given no argument and no block" do

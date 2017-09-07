@@ -47,8 +47,7 @@ module NetHTTPSpecs
     @server_thread = nil
 
     def port
-      raise "server not started" unless @server
-      @server.config[:Port]
+      @server ? @server.config[:Port] : 3333
     end
 
     def start_server
@@ -80,11 +79,11 @@ module NetHTTPSpecs
         rescue Errno::EPIPE
           # Because WEBrick is not thread-safe and only catches IOError
         end
-        @server = nil
       end
       if @server_thread
-        @server_thread.join
-        @server_thread = nil
+        ruby_version_is "2.2" do # earlier versions can stay blocked on IO.select
+          @server_thread.join
+        end
       end
       timeout = WEBrick::Utils::TimeoutHandler
       timeout.terminate if timeout.respond_to?(:terminate)

@@ -8,10 +8,6 @@ describe "C-API Struct function" do
     @struct = @s.rb_struct_define("CAPIStruct", "a", "b", "c")
   end
 
-  after :each do
-    Struct.send(:remove_const, :CAPIStruct)
-  end
-
   describe "rb_struct_define" do
     it "creates accessors for the struct members" do
       instance = @struct.new
@@ -101,8 +97,10 @@ describe "C-API Struct function" do
   end
 
   describe "rb_struct_define" do
-    it "raises an ArgumentError if arguments contain duplicate member name" do
-      lambda { @s.rb_struct_define(nil, "a", "b", "a") }.should raise_error(ArgumentError)
+    ruby_version_is "2.2" do
+      it "raises an ArgumentError if arguments contain duplicate member name" do
+        lambda { @s.rb_struct_define(nil, "a", "b", "a") }.should raise_error(ArgumentError)
+      end
     end
 
     it "raises a NameError if an invalid constant name is given" do

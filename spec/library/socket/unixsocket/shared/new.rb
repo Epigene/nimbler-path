@@ -11,7 +11,7 @@ describe :unixsocket_new, shared: true do
     after :each do
       @client.close if @client
       @server.close
-      SocketSpecs.rm_socket @path
+      rm_r @path
     end
 
     it "opens a unix socket on the specified file" do

@@ -29,6 +29,28 @@ module Specs
         false
       end
     end
+
+    class RandomID
+      def ==(other)
+        true
+      end
+
+      def equal?(other)
+        true
+      end
+
+      def object_id()
+        @ids ||= []
+
+        loop {
+          candidate = rand
+          next if @ids.include? candidate
+          @ids << candidate
+          return candidate
+        }
+      end
+    end
+
   end
 end
 
@@ -121,15 +143,19 @@ describe "Kernel#=== for a class with #== and #equal? overridden to always be fa
   end
 end
 
-describe "Kernel#=== does not call #object_id nor #equal?" do
+describe "Kernel#=== for a class with #object_id overridden to always be different #== and #equal? overridden to always be true" do
   before :each do
-    @o1 = Object.new
-    @o1.should_not_receive(:object_id)
-    @o1.should_not_receive(:equal?)
+    @o  = Object.new
+    @o1 = Specs::Kernel::RandomID.new
+    @o2 = @o1.dup
   end
 
-  it "but still returns true for #== or #=== on the same object" do
+  it "returns true if #== or #equal? is true even if object id is different" do
+    @o1.object_id.should_not == @o1.object_id
+
+    @o1.should equal(@o1)
     (@o1 == @o1).should == true
+
     (@o1 === @o1).should == true
   end
 end

@@ -1,9 +1,5 @@
 class Object
   autoload :CApiModuleSpecsAutoload, File.expand_path('../const_get_object.rb', __FILE__)
-
-  module CApiModuleSpecsModuleA
-    X = 1
-  end
 end
 
 class CApiModuleSpecs

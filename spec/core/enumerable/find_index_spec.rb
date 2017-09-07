@@ -41,9 +41,7 @@ describe "Enumerable#find_index" do
   end
 
   it "ignores the block if an argument is given" do
-    -> {
-      @numerous.find_index(-1) {|e| true }.should == nil
-    }.should complain(/given block not used/)
+    @numerous.find_index(-1) {|e| true }.should == nil
   end
 
   it "returns an Enumerator if no block given" do

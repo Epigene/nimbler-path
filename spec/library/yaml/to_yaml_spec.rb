@@ -18,7 +18,6 @@ describe "Object#to_yaml" do
   end
 
   it "returns the YAML representation of a Date object" do
-    require 'date'
     Date.parse('1997/12/30').to_yaml.should match_yaml("--- 1997-12-30\n")
   end
 

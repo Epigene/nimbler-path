@@ -18,17 +18,19 @@ describe :sizedqueue_enq, shared: true do
     q.size.should == 0
   end
 
-  it "raises a ThreadError if queued elements exceed size when not blocking" do
-    q = SizedQueue.new(2)
+  ruby_version_is "2.2" do
+    it "raises a ThreadError if queued elements exceed size when not blocking" do
+      q = SizedQueue.new(2)
 
-    non_blocking = true
-    add_to_queue = lambda { q.send(@method, Object.new, non_blocking) }
+      non_blocking = true
+      add_to_queue = lambda { q.send(@method, Object.new, non_blocking) }
 
-    q.size.should == 0
-    add_to_queue.call
-    q.size.should == 1
-    add_to_queue.call
-    q.size.should == 2
-    add_to_queue.should raise_error(ThreadError)
+      q.size.should == 0
+      add_to_queue.call
+      q.size.should == 1
+      add_to_queue.call
+      q.size.should == 2
+      add_to_queue.should raise_error(ThreadError)
+    end
   end
 end

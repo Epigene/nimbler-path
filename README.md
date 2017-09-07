@@ -16,7 +16,7 @@ Open an issue or PR if other OS support is needed.
 ## Dependencies
 
 ```ruby
-ruby ">= 2.1.0" # for required keyword arguments
+ruby ">= 2.1.10" # for required keyword arguments
 ```
 
 ## Installation
@@ -74,15 +74,15 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Epigen
 
 __Development setup__
 
-1. Clone the project with `git clone --recursive git@github.com:Epigene/nimbler-path.git`
-2. Make sure you are using Ruby v2.4.1
+1. Clone the project with `git clone git@github.com:Epigene/nimbler-path.git`
+2. Make sure you are using Ruby v2.1.10
 2. Bundle
 3. Run naive gem-code tests with `ruby test/nimbler_path_test.rb`
 4. Run the tests in included Ruby Spec Suite with `mspec/bin/mspec spec` (Specs affected by this gem are run with `mspec/bin/mspec spec/library/pathname`.
 5. Work on feature, commit and make a pull request :clap:
 6. See how benchmarks add up with `ruby test/nimbler_path_benchmarks.rb`
 
-Please note that this project includes a snapshot of the [Ruby Spec Suite](https://github.com/ruby/spec) project at [SHA dec709b27a1d76bdc27a53a3812f4d3be43f2c2e]()https://github.com/ruby/spec/tree/dec709b27a1d76bdc27a53a3812f4d3be43f2c2e (for Ruby 2.4.1) under spec.  
+Please note that this project includes a snapshot of the [Ruby Spec Suite](https://github.com/ruby/spec/commit/96ba5d539892ed3436cf667d396b10458f95b6d0) project under `spec` and a snapshot of [MSpec project](https://github.com/ruby/mspec/commit/1fa5f7d90503a95712ab378110cba17340269a9d) under `mspec`.
 
 ## License
 

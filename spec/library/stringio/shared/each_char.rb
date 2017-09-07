@@ -1,7 +1,9 @@
 # -*- encoding: utf-8 -*-
 describe :stringio_each_char, shared: true do
   before :each do
+    old_kcode, $KCODE = "UTF-8", $KCODE
     @io = StringIO.new("xyz äöü")
+    $KCODE = old_kcode
   end
 
   it "yields each character code in turn" do

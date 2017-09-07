@@ -40,10 +40,8 @@ describe :dir_delete, shared: true do
   end
 
   it "raises an Errno::ENOTDIR when trying to remove a non-directory" do
-    file = DirSpecs.mock_rmdir("nonempty/regular")
-    touch(file)
     lambda do
-      Dir.send @method, file
+      Dir.send @method, __FILE__
     end.should raise_error(Errno::ENOTDIR)
   end
 

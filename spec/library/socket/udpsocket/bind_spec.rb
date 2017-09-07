@@ -12,31 +12,24 @@ describe "UDPSocket.bind" do
   end
 
   it "binds the socket to a port" do
-    @socket.bind(SocketSpecs.hostname, 0)
-    @socket.addr[1].should be_kind_of(Integer)
-  end
+    @socket.bind(SocketSpecs.hostname, SocketSpecs.port)
 
-  it "raises Errno::EINVAL when already bound" do
-    @socket.bind(SocketSpecs.hostname, 0)
-
-    lambda {
-      @socket.bind(SocketSpecs.hostname, @socket.addr[1])
-    }.should raise_error(Errno::EINVAL)
+    lambda { @socket.bind(SocketSpecs.hostname, SocketSpecs.port) }.should raise_error
   end
 
   it "receives a hostname and a port" do
-    @socket.bind(SocketSpecs.hostname, 0)
+    @socket.bind(SocketSpecs.hostname, SocketSpecs.port)
 
     port, host = Socket.unpack_sockaddr_in(@socket.getsockname)
 
     host.should == "127.0.0.1"
-    port.should == @socket.addr[1]
+    port.should == SocketSpecs.port
   end
 
   it "binds to INADDR_ANY if the hostname is empty" do
-    @socket.bind("", 0)
+    @socket.bind("", SocketSpecs.port)
     port, host = Socket.unpack_sockaddr_in(@socket.getsockname)
     host.should == "0.0.0.0"
-    port.should == @socket.addr[1]
+    port.should == SocketSpecs.port
   end
 end

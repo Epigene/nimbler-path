@@ -12,14 +12,24 @@ describe :string_gsub_named_capture, shared: true do
 end
 
 describe "String#gsub with pattern and replacement" do
+
+  before :each do
+    @kcode = $KCODE
+  end
+
+  after :each do
+    $KCODE = @kcode
+  end
+
   it "inserts the replacement around every character when the pattern collapses" do
     "hello".gsub(//, ".").should == ".h.e.l.l.o."
   end
 
-  it "respects unicode when the pattern collapses" do
+  it "respects $KCODE when the pattern collapses" do
     str = "こにちわ"
     reg = %r!!
 
+    $KCODE = "utf-8"
     str.gsub(reg, ".").should == ".こ.に.ち.わ."
   end
 
@@ -180,7 +190,7 @@ describe "String#gsub with pattern and replacement" do
     hello.gsub(//.taint, "foo").tainted?.should == false
   end
 
-  it "handles pattern collapse" do
+  it "handles pattern collapse without $KCODE" do
     str = "こにちわ"
     reg = %r!!
     str.gsub(reg, ".").should == ".こ.に.ち.わ."

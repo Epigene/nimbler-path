@@ -34,11 +34,13 @@ describe "CApiGlobalSpecs" do
     @f.rb_f_global_variables.should == Kernel.global_variables
   end
 
-  it "rb_define_variable should define a new global variable" do
-    @f.rb_define_variable("my_gvar", "ABC")
-    $my_gvar.should == "ABC"
-    $my_gvar = "XYZ"
-    @f.sb_get_global_value.should == "XYZ"
+  not_supported_on :rubinius, :jruby do
+    it "rb_define_variable should define a new global variable" do
+      @f.rb_define_variable("my_gvar", "ABC")
+      $my_gvar.should == "ABC"
+      $my_gvar = "XYZ"
+      @f.sb_get_global_value.should == "XYZ"
+    end
   end
 
   it "rb_define_readonly_variable should define a new readonly global variable" do
@@ -47,10 +49,12 @@ describe "CApiGlobalSpecs" do
     lambda { $ro_gvar = 10 }.should raise_error(NameError)
   end
 
-  it "rb_define_hooked_variable should define a C hooked global variable" do
-    @f.rb_define_hooked_variable_2x("$hooked_gvar")
-    $hooked_gvar = 2
-    $hooked_gvar.should == 4
+  not_supported_on :rubinius, :jruby do
+    it "rb_define_hooked_variable should define a C hooked global variable" do
+      @f.rb_define_hooked_variable_2x("$hooked_gvar")
+      $hooked_gvar = 2
+      $hooked_gvar.should == 4
+    end
   end
 
   describe "rb_rs" do
@@ -188,7 +192,7 @@ describe "CApiGlobalSpecs" do
         running = true
       end
 
-      Thread.pass while thr.status and !running
+      Thread.pass until running
       $_.should be_nil
 
       thr.join
@@ -215,7 +219,7 @@ describe "CApiGlobalSpecs" do
         running = true
       end
 
-      Thread.pass while thr.status and !running
+      Thread.pass until running
       $_.should be_nil
 
       thr.join
