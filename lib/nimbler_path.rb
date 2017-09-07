@@ -4,7 +4,7 @@ require 'ffi'
 module NimblerPath
 
   def self.test
-    binding.pry
+    # binding.pry
     string = "yay!"
     puts string
     return string
