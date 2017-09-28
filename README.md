@@ -7,7 +7,7 @@ This gem replaces most-used Pathname class ruby methods with much faster counter
 Use for hassle-free, dependency-free speed gains, primarily in Rails projects.  
 
 ## Supported Platforms
-As of version 0.9.0 the gem supports 64bit versions of Linux and Mac.  
+As of version 0.9.0 the gem will support 64bit versions of Linux and Mac.  
 Support for Windows is a hassle due to differing path separator, among other things.  
 Open an issue or PR if other OS support is needed.  
 
@@ -70,7 +70,7 @@ This project, at most, aims to provide performant variants for those six methods
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Epigene/nimbler_path. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
-__Development setup__
+__Ruby development setup__
 
 1. Clone the project with `git clone git@github.com:Epigene/nimbler-path.git`
 2. Make sure you are using Ruby v2.1.10
@@ -81,6 +81,13 @@ __Development setup__
 6. See how benchmarks add up with `ruby test/nimbler_path_benchmarks.rb`
 
 Please note that this project includes a snapshot of the [Ruby Spec Suite](https://github.com/ruby/spec/commit/96ba5d539892ed3436cf667d396b10458f95b6d0) project under `spec` and a snapshot of [MSpec project](https://github.com/ruby/mspec/commit/1fa5f7d90503a95712ab378110cba17340269a9d) under `mspec`.
+
+__Nim development setup
+
+1. Make sure you are running nim ..
+2. See if compilation works ..
+3. Work on nim code changes..
+4. https://forum.nim-lang.org/t/3153
 
 ## License
 
